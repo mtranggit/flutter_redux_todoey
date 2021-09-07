@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_redux_todoey/redux/middleware.dart';
 import 'package:redux/redux.dart';
 
 import 'package:flutter_redux_todoey/redux/reducers.dart';
 import 'package:flutter_redux_todoey/redux/actions.dart';
 import 'package:flutter_redux_todoey/model/model.dart';
+import 'package:redux_remote_devtools/redux_remote_devtools.dart';
 
-void main() {
+void main() async {
+  // var remoteDevTools = RemoteDevToolsMiddleware('192.168.68.121:8000');
   final store = Store<AppState>(
     appStateReducer,
     initialState: AppState.initialState(),
+    middleware: [appStateMiddleware],
+    // middleware: [remoteDevTools, appStateMiddleware],
   );
+  // remoteDevTools.store = store;
+  // await remoteDevTools.connect();
   runApp(MyApp(store));
 }
 
@@ -27,13 +34,19 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Redux Todoey',
         theme: ThemeData.dark(),
-        home: MyHomePage(),
+        home: StoreBuilder(
+            onInit: (store) => store.dispatch(GetItemsAction()),
+            builder: (context, Store<AppState> store) => MyHomePage(store)),
       ),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
+  final Store<AppState> store;
+
+  const MyHomePage(this.store);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
