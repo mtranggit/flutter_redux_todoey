@@ -8,17 +8,21 @@ import 'package:redux/redux.dart';
 import 'package:flutter_redux_todoey/redux/reducers.dart';
 import 'package:flutter_redux_todoey/redux/actions.dart';
 import 'package:flutter_redux_todoey/model/model.dart';
-// import 'package:redux_remote_devtools/redux_remote_devtools.dart';
 
+// import 'package:redux_remote_devtools/redux_remote_devtools.dart';
+//
+// 0. Uncommented codes related to redux_remote_devtools
+//
 // 1. Follow instructions to download and run https://github.com/reduxjs/redux-devtools/tree/main/packages/redux-devtools-cli
 //
 // 2. Find out your current local ip address: 192.168.68.121
 //
 // 3. Start up with command
 // redux-devtools --port=8000
-// 4. Launch your Chrome and go to this address: http://192.168.68.121:8000/, go to Settings and change Connection Settings to
+// 4. Launch your Chrome and go to this address: http://localhost:8000/, go to Settings and change Connection Settings to
 // use local(custom) server: hostname: localhost, port: 8000
 // 5. Start up the app
+//
 //
 void main() {
 // void main() async {
