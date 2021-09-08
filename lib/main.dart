@@ -25,7 +25,7 @@ void main() {
   final store = Store<AppState>(
     appStateReducer,
     initialState: AppState.initialState(),
-    middleware: [appStateMiddleware],
+    middleware: appStateMiddleware(),
     // middleware: [appStateMiddleware, remoteDevTools],
   );
   // remoteDevTools.store = store;
@@ -103,11 +103,21 @@ class ItemListWidget extends StatelessWidget {
       children: model.items
           .map(
             (Item item) => ListTile(
-              title: Text(item.body),
-              trailing: IconButton(
+              title: Text(
+                item.body,
+                style: TextStyle(
+                    decoration:
+                        item.completed ? TextDecoration.lineThrough : null),
+              ),
+              leading: IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () => model.onRemoveItem(item),
               ),
+              trailing: Checkbox(
+                  value: item.completed,
+                  onChanged: (value) {
+                    model.onCompletedItem(item);
+                  }),
             ),
           )
           .toList(),
@@ -149,12 +159,14 @@ class _ViewModel {
   final Function(String) onAddItem;
   final Function(Item) onRemoveItem;
   final Function() onRemoveItems;
+  final Function(Item) onCompletedItem;
 
   _ViewModel({
     required this.items,
     required this.onAddItem,
     required this.onRemoveItem,
     required this.onRemoveItems,
+    required this.onCompletedItem,
   });
 
   factory _ViewModel.create(Store<AppState> store) {
@@ -170,11 +182,16 @@ class _ViewModel {
       store.dispatch(RemoveItemsAction());
     }
 
+    _onCompletedItem(Item item) {
+      store.dispatch(ItemCompletedAction(item));
+    }
+
     return _ViewModel(
       items: store.state.items,
       onAddItem: _onAddItem,
       onRemoveItem: _onRemoveItem,
       onRemoveItems: _onRemoveItems,
+      onCompletedItem: _onCompletedItem,
     );
   }
 }
