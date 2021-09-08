@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_redux_todoey/redux/middleware.dart';
+import 'package:flutter_redux_todoey/widgets/item_tile.dart';
 import 'package:redux/redux.dart';
 
 import 'package:flutter_redux_todoey/redux/reducers.dart';
@@ -102,22 +103,11 @@ class ItemListWidget extends StatelessWidget {
     return ListView(
       children: model.items
           .map(
-            (Item item) => ListTile(
-              title: Text(
-                item.body,
-                style: TextStyle(
-                    decoration:
-                        item.completed ? TextDecoration.lineThrough : null),
-              ),
-              leading: IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () => model.onRemoveItem(item),
-              ),
-              trailing: Checkbox(
-                  value: item.completed,
-                  onChanged: (value) {
-                    model.onCompletedItem(item);
-                  }),
+            (Item item) => ItemTile(
+              title: item.body,
+              completed: item.completed,
+              onRemoveItem: () => model.onRemoveItem(item),
+              onToggleItemCheckbox: (value) => model.onCompletedItem(item),
             ),
           )
           .toList(),
